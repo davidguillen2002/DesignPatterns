@@ -1,4 +1,5 @@
-﻿using DesignPatterns.ModelBuilders;
+﻿using DesignPatterns.Factories;
+using DesignPatterns.ModelBuilders;
 using DesignPatterns.Models;
 using DesignPatterns.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -33,16 +34,22 @@ namespace DesignPatterns.Controllers
             return View(model);
         }
 
+        private void CreateVehicle(Creator creator)
+        {
+            _vehicleRepository.AddVehicle(creator.Create());
+        }
+
         [HttpGet]
+        // Uso de Patron Creator
         public IActionResult AddMustang()
         {
-            var builder = new CarBuilder();
-            _vehicleRepository.AddVehicle(
-                builder.Build());
+            var creator = new FordMustangCreator();
+            CreateVehicle(creator);
             return Redirect("/");
         }
 
         [HttpGet]
+        // Uso de Patron Builder
         public IActionResult AddExplorer()
         {
             var builder = new CarBuilder();
